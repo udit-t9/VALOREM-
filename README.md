@@ -34,14 +34,14 @@ Traditional investments require large capital and lack transparency.
 - JavaScript  
 
 ### Backend
-- Java / Spring Boot *(update if different)*  
+- Java / Spring Boot 
 
 ### Database
-- MySQL / MongoDB *(update this)*  
+-PostgreSQL  
 
 ### Tools
 - Git & GitHub  
-- VS Code / IntelliJ  
+- IntelliJ  
 
 ---
 
