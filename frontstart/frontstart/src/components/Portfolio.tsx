@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import type { ReactNode } from 'react';
 import { motion } from 'framer-motion';
 import { TrendingUp, DollarSign, BarChart3, Calendar } from 'lucide-react';
 import clsx from 'clsx';
