@@ -8,7 +8,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/portfolio")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {"http://localhost:5173", "https://valorem-neon.vercel.app"}, allowCredentials = "true")
 public class PortfolioController {
 
     private final PortfolioRepository portfolioRepository;

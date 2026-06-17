@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/trade")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {"http://localhost:5173", "https://valorem-neon.vercel.app"}, allowCredentials = "true")
 public class TradeController {
 
     private final TradeService tradeService;
