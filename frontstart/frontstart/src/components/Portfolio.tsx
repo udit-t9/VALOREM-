@@ -5,8 +5,7 @@ import { TrendingUp, DollarSign, BarChart3, Calendar } from 'lucide-react';
 import clsx from 'clsx';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { useCurrency } from '../contexts/CurrencyContext';
-import { getAssets } from '../services/api';
-import axios from 'axios';
+import { getAssets, getPortfolioHoldings } from '../services/api'; // ✅ IMPORT FROM YOUR API.TS
 import { UPCOMING_PAYOUTS, type Asset, type View } from '../data';
 
 interface PortfolioProps {
@@ -27,14 +26,14 @@ export default function Portfolio({ setView, setSelectedAsset }: PortfolioProps)
   useEffect(() => {
     getAssets()
       .then(res => setAssets(res.data))
-      .catch(err => console.error(err));
+      .catch(err => console.error("Error loading assets:", err));
   }, []);
 
-  // ✅ FETCH PORTFOLIO
+  // ✅ FETCH PORTFOLIO HISTORY (Bypasses localhost smoothly!)
   useEffect(() => {
-    axios.get("http://localhost:8081/api/portfolio")
+    getPortfolioHoldings()
       .then(res => setPortfolio(res.data))
-      .catch(err => console.error(err));
+      .catch(err => console.error("Error loading portfolio entries:", err));
   }, []);
 
   // ✅ MERGE DATA (VERY IMPORTANT 🔥)
@@ -46,22 +45,22 @@ export default function Portfolio({ setView, setSelectedAsset }: PortfolioProps)
 
     return {
       asset,
-      tokensOwned: p.tokensOwned,
-      currentValue: pricePerToken * p.tokensOwned,
+      tokensOwned: p.tokensOwned || p.quantity, // Handles both mapping patterns smoothly
+      currentValue: pricePerToken * (p.tokensOwned || p.quantity),
       pnl: 0,
       pnlPercent: 0,
     };
   }).filter(Boolean);
 
   // ✅ TOTALS
-  const totalValue = PORTFOLIO_HOLDINGS.reduce((sum, h) => sum + h.currentValue, 0);
+  const totalValue = PORTFOLIO_HOLDINGS.reduce((sum: number, h: any) => sum + h.currentValue, 0);
   const totalYield = 0;
   const activeInvestments = PORTFOLIO_HOLDINGS.length;
 
   // ✅ DONUT
   const categoryMap = new Map<string, number>();
-  PORTFOLIO_HOLDINGS.forEach(h => {
-    const cat = h.asset.category.replace('-', ' ').replace(/\b\w/g, c => c.toUpperCase());
+  PORTFOLIO_HOLDINGS.forEach((h: any) => {
+    const cat = h.asset.category.replace('-', ' ').replace(/\b\w/g, (c: string) => c.toUpperCase());
     categoryMap.set(cat, (categoryMap.get(cat) || 0) + h.currentValue);
   });
 
@@ -132,26 +131,30 @@ export default function Portfolio({ setView, setSelectedAsset }: PortfolioProps)
         <div className="lg:col-span-2 bg-zinc-900/50 border border-zinc-800 rounded-xl p-6">
           <h2 className="text-white mb-4">Holdings</h2>
 
-          {PORTFOLIO_HOLDINGS.map((holding, i) => (
-            <div key={i}
-              onClick={() => handleRowClick(holding.asset)}
-              className="flex justify-between p-4 bg-zinc-800 rounded-lg mb-2 cursor-pointer">
+          {PORTFOLIO_HOLDINGS.length === 0 ? (
+            <p className="text-zinc-500 text-sm italic p-4">No active holdings found in your history database.</p>
+          ) : (
+            PORTFOLIO_HOLDINGS.map((holding: any, i: number) => (
+              <div key={i}
+                onClick={() => handleRowClick(holding.asset)}
+                className="flex justify-between p-4 bg-zinc-800 rounded-lg mb-2 cursor-pointer hover:bg-zinc-700/50 transition-colors">
 
-              <div className="flex gap-3">
-                <img src={holding.asset.image} className="w-10 h-10 rounded" />
-                <div>
-                  <p className="text-white">{holding.asset.title}</p>
-                  <p className="text-zinc-400 text-xs">{holding.asset.category}</p>
+                <div className="flex gap-3">
+                  <img src={holding.asset.image} className="w-10 h-10 rounded object-cover" />
+                  <div>
+                    <p className="text-white font-medium">{holding.asset.title}</p>
+                    <p className="text-zinc-400 text-xs mt-0.5">{holding.asset.category}</p>
+                  </div>
                 </div>
-              </div>
 
-              <div className="text-right">
-                <p className="text-white">{formatPrice(holding.currentValue)}</p>
-                <p className="text-green-400">{holding.tokensOwned} tokens</p>
-              </div>
+                <div className="text-right">
+                  <p className="text-white font-mono font-medium">{formatPrice(holding.currentValue)}</p>
+                  <p className="text-green-400 text-sm">{holding.tokensOwned} tokens</p>
+                </div>
 
-            </div>
-          ))}
+              </div>
+            ))
+          )}
 
         </div>
 
@@ -161,9 +164,9 @@ export default function Portfolio({ setView, setSelectedAsset }: PortfolioProps)
       <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6">
         <h2 className="text-white mb-4">Upcoming Payouts</h2>
         {UPCOMING_PAYOUTS.map((payout, i) => (
-          <div key={i} className="flex justify-between mb-2">
+          <div key={i} className="flex justify-between mb-2 text-sm text-zinc-300">
             <span>{payout.assetTitle}</span>
-            <span>{formatPrice(payout.amount)}</span>
+            <span className="font-mono text-green-400">{formatPrice(payout.amount)}</span>
           </div>
         ))}
       </div>
