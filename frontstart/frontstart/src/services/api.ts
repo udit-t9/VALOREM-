@@ -24,7 +24,7 @@ export const getAssetsByCategory = (category: string) =>
 // ───────── TRADE & PORTFOLIO APIs ─────────
 
 // Fetch all logged transactions/holdings for the dashboard
-export const getPortfolioHoldings = () => API.get("/trade/history");
+export const getPortfolioHoldings = () => API.get("/portfolio");
 
 // Buy tokens
 export const buyAsset = (assetId: string | number, quantity: number) =>
