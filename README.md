@@ -5,7 +5,7 @@ A full-stack application that lets users buy, sell, and track fractions of high-
 
 ---
 
-##  What is VALOREM? (Explained simply)
+##  What is VALOREM?
 Imagine you want to invest in a massive $1,000,000 commercial apartment building, but you only have $100. Normally, you're locked out of the investment market. 
 
 **VALOREM solves this.** The platform takes high-value real-world assets (like real estate or luxury assets), splits their total value into thousands of affordable digital "tokens," and allows everyday users to buy fractional pieces of them. As the asset earns money or gains value, token holders earn their share of the yields. 
