@@ -21,14 +21,25 @@ Imagine you want to invest in a massive $1,000,000 commercial apartment building
 
 ---
 
-## The Tech Stack (How it works under the hood)
+## 🛠️ The Tech Stack & Architecture
 
 We split the project into two independent parts talking to each other across the cloud:
 
-* **The Frontend (The Face):** Built using **React** and **Vite** for a fast, responsive user interface. Styled beautifully using **Tailwind CSS**, with interactive animations handled by **Framer Motion** and graphs rendered via **Recharts**. Hosted on **Vercel**.
-* **The Backend (The Brain):** A secure **Spring Boot (Java)** REST API server that processes purchases, updates holdings, and communicates with the database. Containerized inside **Docker** and hosted on **Render**.
-* **The Database (The Memory):** A **Neon PostgreSQL** serverless cloud database that permanently remembers transaction histories and user portfolios.
+### Frontend (The Face)
+* **Framework:** **React** with **Vite** for a fast, optimized client environment.
+* **Styling & UI:** **Tailwind CSS** for clean layout designs, with smooth transitions handled by **Framer Motion**.
+* **Data Visualization:** **Recharts** to render dynamic portfolio asset allocation breakdowns.
+* **Hosting:** Deployed via **Vercel** with integrated Git CI/CD pipelines.
 
+### Backend & Security (The Brain)
+* **Core Framework:** **Java Spring Boot** built on top of the **Spring MVC** architecture to handle RESTful API web routing.
+* **Backend Security & Policy:** Managed through customized **Spring Security** configurations, including strict **Cross-Origin Resource Sharing (CORS)** policies and credentials validation to secure communication with the frontend domain.
+* **Data Layer:** Utilizes **Spring Data JPA** for Object-Relational Mapping (ORM) alongside reliable HikariCP database connection pooling.
+* **Containerization:** Packaged completely inside a **Docker** container environment to ensure system parity between local testing and production deployment.
+* **Hosting:** Hosted as a decoupled web service on **Render**.
+
+### Database (The Memory)
+* **Engine:** High-performance, serverless **Neon PostgreSQL** cloud database that permanently
 ---
 
 ##  System Flow Chart
